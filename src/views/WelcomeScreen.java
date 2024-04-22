@@ -33,7 +33,7 @@ public class WelcomeScreen {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 frame.dispose();
-                // new SignInView();
+                new LoginView();
             }
         });
         JButton register = new JButton("Register");

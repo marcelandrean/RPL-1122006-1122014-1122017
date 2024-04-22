@@ -41,6 +41,34 @@ public class UserController {
         return (customers);
     }
 
+    // Get user by username/email & password
+    public User getUser(String credential, String password) {
+        User user = null;
+        try {
+            conn.connect();
+            String query = "SELECT * FROM users WHERE (username=? OR email=?) AND password=?";
+            PreparedStatement pstmt = conn.con.prepareStatement(query);
+            pstmt.setString(1, credential);
+            pstmt.setString(2, credential);
+            pstmt.setString(3, password);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                user = new User();
+                user.setUsername(rs.getString("Username"));
+                user.setFullname(rs.getString("FullName"));
+                user.setEmail(rs.getString("Email"));
+                user.setPassword(rs.getString("Password"));
+                user.setPhoneNumber(rs.getString("PhoneNumber"));
+                user.setUserType(UserType.valueOf(rs.getString("UserType")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.disconnect(); // Close the database connection
+        }
+        return user;
+    }
+
     // Insert customer into table Users
     public boolean insertNewCustomer(Customer customers) {
         try {
