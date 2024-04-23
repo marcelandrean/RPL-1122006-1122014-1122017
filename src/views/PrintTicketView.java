@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JOptionPane;
 
 import controllers.ConcertController;
 import controllers.TicketController;
@@ -77,7 +78,8 @@ public class PrintTicketView {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 Transaction transaction = new TransactionController().getTransactionById(transIdField.getText());
-                // Concert concert = new ConcertController().getConcertByTransactionId(transaction.getId());
+                Ticket ticket = new TicketController().getTicketByTransactionId(transaction.getId());
+                Concert concert = new ConcertController().getConcertByTicketId(ticket.getId());
 
                 frame.dispose();
                 showTicket(concert, transaction);
@@ -111,25 +113,67 @@ public class PrintTicketView {
         frame.add(background);
 
         // Add text labels
-        JLabel titleLabel = new JLabel("Concert Title");
-        titleLabel.setBounds(20, 20, 200, 30); // Adjust position and size as needed
+        JLabel titleLabel = new JLabel(concert.getName());
+        titleLabel.setBounds(20, 20, 1000, 30); // Adjust position and size as needed
         titleLabel.setForeground(Color.WHITE); // Set font color to white
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18)); // Set font size and style
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 26)); // Set font size and style
         background.add(titleLabel);
 
-        JLabel descriptionLabel = new JLabel("Concert Description");
-        descriptionLabel.setBounds(20, 50, 300, 30); // Adjust position and size as needed
-        descriptionLabel.setForeground(Color.WHITE); // Set font color to white
-        descriptionLabel.setFont(new Font("Arial", Font.PLAIN, 14)); // Set font size and style
-        background.add(descriptionLabel);
+        JLabel artistLabel = new JLabel("Artist: " + concert.getArtist());
+        artistLabel.setBounds(20, 50, 1000, 30); // Adjust position and size as needed
+        artistLabel.setForeground(Color.WHITE); // Set font color to white
+        artistLabel.setFont(new Font("Arial", Font.BOLD, 20)); // Set font size and style
+        background.add(artistLabel);
 
-        JLabel dateLabel = new JLabel("Concert Date");
-        dateLabel.setBounds(20, 80, 200, 30); // Adjust position and size as needed
+        JLabel venueLabel = new JLabel("Venue: " + concert.getLocation());
+        venueLabel.setBounds(20, 80, 1000, 30); // Adjust position and size as needed
+        venueLabel.setForeground(Color.WHITE); // Set font color to white
+        venueLabel.setFont(new Font("Arial", Font.BOLD, 20)); // Set font size and style
+        background.add(venueLabel);
+
+        JLabel dateLabel = new JLabel("Date: " + concert.getDate().toString());
+        dateLabel.setBounds(20, 110, 1000, 30); // Adjust position and size as needed
         dateLabel.setForeground(Color.WHITE); // Set font color to white
-        dateLabel.setFont(new Font("Arial", Font.PLAIN, 14)); // Set font size and style
+        dateLabel.setFont(new Font("Arial", Font.BOLD, 20)); // Set font size and style
         background.add(dateLabel);
 
-        // Add other text labels as needed
+        JLabel transactionIdLabel = new JLabel(transaction.getId().toUpperCase());
+        transactionIdLabel.setBounds(20, 180, 1000, 30); // Adjust position and size as needed
+        transactionIdLabel.setForeground(Color.WHITE); // Set font color to white
+        transactionIdLabel.setFont(new Font("Arial", Font.BOLD, 20)); // Set font size and style
+        background.add(transactionIdLabel);
+
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                frame.dispose();
+                new MainMenuCustomer();
+            }
+        });
+
+        JButton exchangeButton = new JButton("Exchange");
+        exchangeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                int choice = JOptionPane.showConfirmDialog(null, "Confirm exchange?", "Confirmation",
+                        JOptionPane.YES_NO_OPTION);
+                if (choice == JOptionPane.YES_OPTION) {
+                    // Update transaction status to "EXCHANGED"
+                    TransactionController tc = new TransactionController();
+                    transaction.updateStatus();
+                    tc.updateTransactionStatus(transaction.getId());
+
+                    // Display a success message
+                    JOptionPane.showMessageDialog(null, "Transaction successfully exchanged.");
+
+                    // Go back to the main menu or perform any other action
+                    frame.dispose();
+                    new MainMenuCustomer();
+                }
+            }
+        });
+        background.add(exchangeButton);
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

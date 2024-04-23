@@ -1,6 +1,6 @@
 package models;
 
-public class Order {
+public abstract class Order {
 
     private int quantity;
 
@@ -19,3 +19,5 @@ public class Order {
         this.quantity = quantity;
     }
 }
+
+

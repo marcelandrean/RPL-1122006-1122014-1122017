@@ -180,6 +180,7 @@ public class BuyTicketView {
         for (Ticket ticket : tickets) {
             String categoryAndPrice = ticket.getCategory() + " - Rp" + formatPrice(ticket.getPrice());
             categoryComboBox.addItem(categoryAndPrice);
+            // Use ticket ID and concert ID as the map value separated by a delimiter
             categoryMap.put(categoryAndPrice, ticket.getId() + "-" + ticket.getConcertId());
         }
 
@@ -220,7 +221,7 @@ public class BuyTicketView {
         JTextField quantityField = new JTextField(2);
         contentPanel.add(quantityField, gbc);
 
-        // Buy button
+        // Buy button action listener
         JButton buyButton = new JButton("Buy ticket");
         buyButton.addActionListener(new ActionListener() {
             @Override
@@ -229,9 +230,10 @@ public class BuyTicketView {
                         "Confirmation", JOptionPane.YES_NO_OPTION);
                 if (choice == JOptionPane.YES_OPTION) {
                     String selectedCategoryAndPrice = (String) categoryComboBox.getSelectedItem();
-                    String[] parts = selectedCategoryAndPrice.split("-");
-                    int selectedTicketId = Integer.parseInt(parts[0]); // Extract ticket ID
-                    int selectedConcertId = Integer.parseInt(parts[1]); // Extract concert ID
+                    String ticketInfo = categoryMap.get(selectedCategoryAndPrice); // Retrieve ticket ID and concert ID
+                    String[] ticketParts = ticketInfo.split("-"); // Split ticket ID and concert ID
+                    int selectedTicketId = Integer.parseInt(ticketParts[0]); // Extract ticket ID
+                    int selectedConcertId = Integer.parseInt(ticketParts[1]); // Extract concert ID
                     System.out.println("Selected ticket ID: " + selectedTicketId);
 
                     int quantity = Integer.parseInt(quantityField.getText());
@@ -262,6 +264,7 @@ public class BuyTicketView {
                 }
             }
         });
+
         gbc.gridx = 2;
         gbc.fill = GridBagConstraints.NONE;
         contentPanel.add(buyButton, gbc);

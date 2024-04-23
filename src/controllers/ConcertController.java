@@ -63,6 +63,30 @@ public class ConcertController {
         return concert;
     }
 
+    public Concert getConcertByTicketId(int ticketId) {
+        Concert concert = new Concert();
+        try {
+            conn.connect();
+            String query = "SELECT c.* FROM concerts c JOIN tickets t ON c.ID = ?";
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, ticketId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                concert.setId(rs.getInt("ID"));
+                concert.setName(rs.getString("Name"));
+                concert.setArtist(rs.getString("Artist"));
+                concert.setLocation(rs.getString("Location"));
+                concert.setDate(rs.getTimestamp("Date"));
+                concert.setImagePath(rs.getString("ImagePath"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.disconnect(); // Close the database connection
+        }
+        return concert;
+    }
+
     // Insert concert into table Concerts
     public boolean insertNewConcert(Concert concert) {
         try {
@@ -113,6 +137,7 @@ public class ConcertController {
         }
     }
 
+    // Update many concerts (ArrayList) in table Concerts
     public boolean updateConcerts(ArrayList<Concert> concerts, ArrayList<Integer> oldIds) {
         boolean success = true;
         for (int i = 0; i < concerts.size(); i++) {

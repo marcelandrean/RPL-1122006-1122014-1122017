@@ -10,7 +10,6 @@ public class Transaction {
     private ArrayList<Order> orders;
     private Timestamp transactionDate;
     private double totalPrice;
-    private String status;
     
     public TransactionInterface state;
 
@@ -87,4 +86,6 @@ public class Transaction {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    private String status;
 }
