@@ -1,5 +1,6 @@
 package views;
 
+import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import controllers.UserController;
@@ -21,18 +21,17 @@ import models.UserSessionManager;
 public class LoginView {
 
     private JFrame frame;
-    private JPanel formPanel;
     private GridBagConstraints gbc;
     private ViewHelper helper;
 
     public LoginView() {
 
         frame = new JFrame();
-        frame.setTitle("Login");
+        frame.setTitle("HB Promotions - Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        formPanel = new JPanel();
+        JPanel formPanel = new JPanel();
         formPanel.setLayout(new GridBagLayout());
 
         gbc = new GridBagConstraints();
@@ -42,14 +41,14 @@ public class LoginView {
         helper = new ViewHelper();
 
         // Input username or email
-        helper.createLabel(gbc, formPanel, "Username/Email", 0);
-        helper.setInputConstraints(gbc);
+        helper.createLabel(gbc, formPanel, "Username/Email", 0, 0);
+        helper.setInputConstraints(gbc, 1);
         JTextField credentialField = new JTextField(20);
         formPanel.add(credentialField, gbc);
 
         // Input password
-        helper.createLabel(gbc, formPanel, "Password", 1);
-        helper.setInputConstraints(gbc);
+        helper.createLabel(gbc, formPanel, "Password", 0, 1);
+        helper.setInputConstraints(gbc, 1);
         JPasswordField passwordField = new JPasswordField(20);
         formPanel.add(passwordField, gbc);
 
@@ -61,6 +60,7 @@ public class LoginView {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         JButton backButton = new JButton("Back");
+        backButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         buttonPanel.add(backButton);
         backButton.addActionListener(new ActionListener() {
             @Override
@@ -71,6 +71,7 @@ public class LoginView {
         });
 
         JButton loginButton = new JButton("Login");
+        loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         buttonPanel.add(loginButton);
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -79,22 +80,30 @@ public class LoginView {
 
                 UserSessionManager.getInstance().setUser(user);
 
-                frame.dispose();
                 if (user == null) {
                     helper.errorResponse("Wrong username, email or password!");
+                    return;
                 } else {
-                    new MainMenu();
+                    helper.infoResponse("Login succesful!");
+                    frame.dispose();
+                    if (user.getUserType().name().equals("CUSTOMER")) {
+                        new MainMenuCustomer();
+                    } else if (user.getUserType().name().equals("ADMIN")) {
+                        new MainMenuAdmin();
+                    }
                 }
             }
         });
 
         formPanel.add(buttonPanel, gbc);
 
-        // Scroll pane + frame view
-        JScrollPane scrollPane = new JScrollPane(formPanel);
-        frame.add(scrollPane);
+        frame.add(formPanel);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        new LoginView();
     }
 }
