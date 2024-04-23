@@ -38,12 +38,13 @@ public class TransactionController {
     public int createTicketTransaction(Transaction transaction) {
         try {
             conn.connect();
-            String query = "INSERT INTO transactions (ID, Username, TransactionDate, TotalPrice) VALUES(?,?,?,?)";
+            String query = "INSERT INTO transactions (ID, Username, TransactionDate, TotalPrice, Status) VALUES(?,?,?,?,?)";
             PreparedStatement stmt = conn.con.prepareStatement(query);
             stmt.setString(1, transaction.getId());
             stmt.setString(2, transaction.getUsername());
             stmt.setTimestamp(3, transaction.getTransactionDate());
             stmt.setDouble(4, transaction.getTotalPrice());
+            stmt.setString(5, transaction.getStatus());
 
             stmt.executeUpdate();
             return 1;
@@ -59,8 +60,19 @@ public class TransactionController {
         }
     }
 
-    public void updateTransaction() {
-        // Add code to update an existing transaction
+    public void updateTransactionStatus(String id) {
+        try {
+            conn.connect();
+            String query = "UPDATE transactions SET Status = '?' WHERE ID = ?";
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setString(1, "EXCHANGED");
+            stmt.setString(2, id);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.disconnect(); // Close the database connection
+        }
     }
 
     public void deleteTransaction() {

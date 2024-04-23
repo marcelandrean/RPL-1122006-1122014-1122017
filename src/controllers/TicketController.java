@@ -6,9 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import models.User;
 import models.Ticket;
-import models.TicketOrder;
 
 public class TicketController {
 
@@ -72,6 +70,33 @@ public class TicketController {
         Ticket ticket = null;
         try {
             conn.connect();
+            String query = "SELECT * FROM tickets WHERE ID = ?";
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, ticketId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                ticket = new Ticket();
+                ticket.setId(rs.getInt("ID"));
+                ticket.setConcertId(rs.getInt("ConcertID"));
+                ticket.setCategory(rs.getString("Category"));
+                ticket.setPrice(rs.getDouble("Price"));
+                ticket.setStock(rs.getInt("Stock"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.disconnect(); // Close the database connection
+        }
+        return ticket;
+    }
+
+    // Get ticket by Transaction ID
+    public Ticket getTicketByTransactionId(String transactionId) {
+        Ticket ticket = null;
+        try {
+            conn.connect();
+            int ticketId = new OrderController().getTicketIdByTransactionId(transactionId);
+
             String query = "SELECT * FROM tickets WHERE ID = ?";
             PreparedStatement stmt = conn.con.prepareStatement(query);
             stmt.setInt(1, ticketId);

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -21,7 +20,6 @@ public class BuyMerchView {
     private JFrame frame;
     private JPanel panel;
     private GridBagConstraints gbc;
-    private ViewHelper helper;
     private MerchandiseController controller;
 
     public BuyMerchView() {
@@ -38,7 +36,6 @@ public class BuyMerchView {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.insets = new Insets(5, 10, 5, 10); // padding
 
-        helper = new ViewHelper();
         controller = new MerchandiseController(); // Assuming you have this class
 
         // Get all merchandise
