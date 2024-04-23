@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2024 at 02:02 AM
+-- Generation Time: Apr 23, 2024 at 05:31 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.1.12
 
@@ -41,7 +41,7 @@ CREATE TABLE `concerts` (
 --
 
 INSERT INTO `concerts` (`ID`, `Name`, `Artist`, `Location`, `Date`, `ImagePath`) VALUES
-(1, 'TWICE 5TH WORLD TOUR ‘READY TO BE’ IN JAKARTA', 'TWICEs', 'Jakarta International Stadium', '2024-04-23 12:00:00', '/img/twice-seating-plan.jpg'),
+(1, 'TWICE 5TH WORLD TOUR ‘READY TO BE’ IN JAKARTA', 'TWICE', 'Jakarta International Stadium', '2024-04-23 12:00:00', '/img/twice-seating-plan.jpg'),
 (2, 'Coldplay Music of the Spheres World Tour Jakarta', 'Coldplay', 'Gelora Bung Karno Stadium Jakarta', '2024-11-15 14:00:00', '/img/coldplay-seating-plan.png'),
 (3, '[2024 IU H.E.R. WORLD TOUR CONCERT] IN JAKARTA DAY 1', 'IU', 'ICE BSD HALL 5-6', '2024-04-27 10:00:00', '/img/iu-seating-plan.png'),
 (4, '[2024 IU H.E.R. WORLD TOUR CONCERT] IN JAKARTA DAY 2', 'IU', 'ICE BSD HALL 5-6', '2024-04-28 12:00:00', '/img/iu-seating-plan.png');
@@ -92,6 +92,13 @@ CREATE TABLE `ticketorders` (
   `quantity` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `ticketorders`
+--
+
+INSERT INTO `ticketorders` (`ticketid`, `transactionid`, `quantity`) VALUES
+(3, '68b5f6a5-9f3a-4027-a58d-31de210eca22', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -111,9 +118,9 @@ CREATE TABLE `tickets` (
 --
 
 INSERT INTO `tickets` (`ID`, `ConcertID`, `Category`, `Price`, `Stock`) VALUES
-(1, 1, 'PINK A', 3600000, 80),
+(1, 1, 'PINK A', 3600000, 77),
 (2, 1, 'PINK B', 3600000, 80),
-(3, 1, 'BLUE A', 3300000, 100),
+(3, 1, 'BLUE A', 3300000, 98),
 (4, 1, 'BLUE B', 3300000, 100),
 (5, 1, 'GREEN A', 2900000, 100),
 (6, 1, 'GREEN B', 2900000, 100),
@@ -186,8 +193,7 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`ID`, `Username`, `TransactionDate`, `TotalPrice`, `Status`) VALUES
-('33055c47-3855-4fbe-863b-7157e82d1a9b', 'marcelandrean', '2024-04-22 23:26:59', 3600000, NULL),
-('8d70848e-be3c-4daa-ab5d-a99f9e2d43a4', 'enrcccc', '2024-04-22 23:27:57', 9900000, NULL);
+('68b5f6a5-9f3a-4027-a58d-31de210eca22', 'marcelandrean', '2024-04-23 02:44:17', 3800000, 'BOOKED');
 
 -- --------------------------------------------------------
 
@@ -210,8 +216,10 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`Username`, `FullName`, `Email`, `Password`, `PhoneNumber`, `UserType`) VALUES
 ('alexanderg16', 'Mikael Alexander', 'alex@gmail.com', 'ppp', '08789789', 'ADMIN'),
+('dasdaweq', 'ADWq', 'weaw@gmail.com', '123', '08312412', 'CUSTOMER'),
 ('enrcccc', 'Jason Enrico', 'jason@gmail.com', 'abc', '08654321', 'CUSTOMER'),
-('marcelandrean', 'Marcel Andrean', 'marcel@gmail.com', '123', '08123456', 'CUSTOMER');
+('marcelandrean', 'Marcel Andrean', 'marcel@gmail.com', '123', '08123456', 'CUSTOMER'),
+('qeqwe', 'Aman ajah', 'eqewqwe@gmail.com', '123', '081324125', 'CUSTOMER');
 
 --
 -- Indexes for dumped tables
