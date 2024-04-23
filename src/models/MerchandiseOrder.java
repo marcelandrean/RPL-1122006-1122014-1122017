@@ -4,6 +4,8 @@ public class MerchandiseOrder extends Order {
 
     private Merchandise merch;
 
+    public MerchandiseOrder(){}
+
     public MerchandiseOrder(int quantity, Merchandise merch) {
         super(quantity);
         this.merch = merch;

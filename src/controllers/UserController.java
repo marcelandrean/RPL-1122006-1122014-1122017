@@ -69,8 +69,8 @@ public class UserController {
         return user;
     }
 
-    // Insert customer into table Users
-    public boolean insertNewCustomer(Customer customers) {
+    // Insert customer into table Users (for Sign Up)
+    public int insertNewCustomer(Customer customers) {
         try {
             conn.connect();
             String query = "INSERT INTO users VALUES(?,?,?,?,?,?)";
@@ -83,25 +83,31 @@ public class UserController {
             stmt.setString(6, customers.getUserType().name());
 
             stmt.executeUpdate();
-            return (true);
+            return 1;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return (false);
+            if (e.getMessage().contains("Username")) {
+                return 2;
+            } else if (e.getMessage().contains("Email")) {
+                return 3;
+            } else {
+                e.printStackTrace();
+                return -1;
+            }
         } finally {
             conn.disconnect(); // Close the database connection
         }
     }
 
     // Update user in table Users
-    public boolean updateUser(User user, String oldUsername) {
+    public boolean updateUser(User newUser, String oldUsername) {
         try {
             conn.connect();
             String query = "UPDATE users SET Username='" + oldUsername + "', "
-                    + "Username='" + user.getUsername() + "', "
-                    + "FullName='" + user.getFullName() + "', "
-                    + "Email='" + user.getEmail() + "', "
-                    + "Password='" + user.getPassword() + "', "
-                    + "PhoneNumber='" + user.getPhoneNumber() + "' "
+                    + "Username='" + newUser.getUsername() + "', "
+                    + "FullName='" + newUser.getFullName() + "', "
+                    + "Email='" + newUser.getEmail() + "', "
+                    + "Password='" + newUser.getPassword() + "', "
+                    + "PhoneNumber='" + newUser.getPhoneNumber() + "' "
                     + "WHERE Username='" + oldUsername + "'";
             Statement stmt = conn.con.createStatement();
             stmt.executeUpdate(query);

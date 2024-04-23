@@ -12,11 +12,11 @@ public class MerchandiseController {
     static DatabaseHandler conn = new DatabaseHandler();
 
     // Get all from table Ticket
-    public ArrayList<Merchandise> getAllMerchandises(){
+    public ArrayList<Merchandise> getAllMerchandise(){
          ArrayList<Merchandise> merchandises = new ArrayList<>();
         try {
             conn.connect();
-            String query = "SELECT * FROM merchandises";
+            String query = "SELECT * FROM merchandise";
             Statement stmt = conn.con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
